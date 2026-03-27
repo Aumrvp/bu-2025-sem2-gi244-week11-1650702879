@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     public float speed = 5f;
+    public Transform focalPoint;
 
     private Rigidbody rb;
 
@@ -12,8 +13,9 @@ public class PlayerController : MonoBehaviour
     private InputAction smashAction;
     private InputAction breakAction;
 
+    public bool hasPowerUp = false;
+    private Coroutine countdownRoutine;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -22,9 +24,49 @@ public class PlayerController : MonoBehaviour
         breakAction = InputSystem.actions.FindAction("Break");
     }
 
-    // Update is called once per frame
     void Update()
     {
+        var move = moveAction.ReadValue<Vector2>();
+        rb.AddForce(move.y * speed * focalPoint.forward);
 
+        if (breakAction.IsPressed())
+        {
+            rb.linearVelocity = Vector3.zero;
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            if (hasPowerUp == true)
+            {
+                var rb = collision.gameObject.GetComponent<Rigidbody>();
+                var dir = collision.transform.position - transform.position;
+                rb.AddForce(5 * dir.normalized, ForceMode.Impulse);
+            }
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("PowerUp"))
+        {
+            hasPowerUp = true;
+            Destroy(other.gameObject);
+
+            if (countdownRoutine != null)
+            {
+                StopCoroutine(countdownRoutine);
+            }
+
+            countdownRoutine = StartCoroutine(PowerUpCountDown());
+        }
+    }
+
+    IEnumerator PowerUpCountDown()
+    {
+        yield return new WaitForSeconds(10f);
+        hasPowerUp = false;
     }
 }
