@@ -1,7 +1,4 @@
-<<<<<<< Updated upstream
-=======
 using System.Collections;
->>>>>>> Stashed changes
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -10,17 +7,6 @@ public class Enemy : MonoBehaviour
     private Rigidbody rb;
     private GameObject player;
 
-<<<<<<< Updated upstream
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-=======
     private bool isStunned = false;
     private Coroutine stunRoutine;
 
@@ -50,7 +36,6 @@ public class Enemy : MonoBehaviour
         Vector3 dir = player.transform.position - transform.position;
         dir.Normalize();
         rb.AddForce(dir * speed);
->>>>>>> Stashed changes
     }
 
     public void Stun(float duration)

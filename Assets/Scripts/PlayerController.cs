@@ -5,24 +5,17 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     public float speed = 5f;
-<<<<<<< Updated upstream
-=======
     public Transform focalPoint;
     public GameObject powerIndicatorPrefab;
     public float powerUpStrength = 15f;
->>>>>>> Stashed changes
 
     private Rigidbody rb;
     private InputAction moveAction;
     private InputAction breakAction;
     private bool hasPowerUp = false;
 
-<<<<<<< Updated upstream
-=======
     private GameObject currentPowerIndicator;
->>>>>>> Stashed changes
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -30,14 +23,11 @@ public class PlayerController : MonoBehaviour
         breakAction = InputSystem.actions.FindAction("Break");
     }
 
-    // Update is called once per frame
     void Update()
     {
+        var move = moveAction.ReadValue<Vector2>();
+        rb.AddForce(move.y * speed * focalPoint.forward);
 
-<<<<<<< Updated upstream
-    }
-}
-=======
         if (breakAction != null && breakAction.IsPressed())
         {
             rb.linearVelocity = Vector3.zero;
@@ -98,4 +88,3 @@ public class PlayerController : MonoBehaviour
         }
     }
 }
->>>>>>> Stashed changes
